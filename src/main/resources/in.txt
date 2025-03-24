@@ -1,1 +1,3 @@
 SEND+MORE=MONEY
+C+B=A
+A+A=A

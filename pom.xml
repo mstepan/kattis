@@ -130,7 +130,7 @@
                                 <!-- Adds the Main-Class entry to the manifest -->
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.github.mstepan.kattis.TemplateMain</mainClass>
+                                    <mainClass>com.github.mstepan.kattis.SendMoreMoney</mainClass>
                                 </transformer>
                             </transformers>
                             <filters>

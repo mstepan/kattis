@@ -11,9 +11,9 @@ import java.util.*;
  */
 public class Template {
 
-    public static void run(BufferedReader in, PrintStream out) throws IOException {
+    public static void run(BufferedReader in) throws IOException {
         String line = in.readLine();
-        out.println(line);
+        System.out.println(line);
     }
 
     public static void main(String[] args) throws Exception {
@@ -31,14 +31,14 @@ public class Template {
                 }
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(inStream))) {
                     System.out.println("==== Debug mode ====");
-                    run(in, System.out);
+                    run(in);
                 }
             }
 
         } else {
             BufferedReader in =
                     new BufferedReader(new InputStreamReader(System.in, Charset.defaultCharset()));
-            run(in, System.out);
+            run(in);
         }
     }
 }

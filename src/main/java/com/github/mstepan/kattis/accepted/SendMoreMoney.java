@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class SendMoreMoney {
 
-    public static void run(BufferedReader in, PrintStream out) throws IOException {
+    public static void run(BufferedReader in) throws IOException {
         String line = in.readLine();
 
         String trimmedLine = line.trim();
@@ -34,7 +34,7 @@ public class SendMoreMoney {
 
         String solution = tracker.hasViableSolution() ? findSolution(tracker) : "impossible";
 
-        out.println(solution);
+        System.out.println(solution);
     }
 
     private static String findSolution(SolutionTracker tracker) {
@@ -243,8 +243,6 @@ public class SendMoreMoney {
         boolean debugMode = System.getenv("DEBUG") != null;
 
         BufferedReader in;
-        PrintStream out = System.out;
-
         if (debugMode) {
             final Path inFilePath =
                     Path.of(
@@ -257,7 +255,7 @@ public class SendMoreMoney {
             in = Files.newBufferedReader(inFilePath);
             try {
                 System.out.println("==== Debug mode ====");
-                run(in, out);
+                run(in);
 
             } finally {
                 in.close();
@@ -265,7 +263,7 @@ public class SendMoreMoney {
 
         } else {
             in = new BufferedReader(new InputStreamReader(System.in, Charset.defaultCharset()));
-            run(in, out);
+            run(in);
         }
     }
 }

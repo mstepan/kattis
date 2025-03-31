@@ -1,4 +1,4 @@
-package com.github.mstepan.kattis;
+package com.github.mstepan.kattis.accepted;
 
 import java.io.*;
 import java.nio.charset.Charset;

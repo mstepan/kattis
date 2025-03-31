@@ -20,5 +20,5 @@
 * Run application
 
 ```bash
-java -jar target/kattis-0.0.1-SNAPSHOT.jar 
+DEBUG=true java -jar target/kattis-0.0.1-SNAPSHOT.jar 
 ```

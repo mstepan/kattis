@@ -74,8 +74,8 @@
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
                     <fork>true</fork>
-                    <source>23</source>
-                    <target>23</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                     <encoding>UTF-8</encoding>
                     <compilerArgs>
                         <!--

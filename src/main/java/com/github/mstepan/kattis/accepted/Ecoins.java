@@ -21,7 +21,7 @@ public class Ecoins {
                 in.readLine();
             }
 
-            String[] coinsAndEmodulus = in.readLine().split(" ");
+            String[] coinsAndEmodulus = in.readLine().split(" ", 2);
 
             int coinsCnt = Integer.parseInt(coinsAndEmodulus[0]);
             int emodulus = Integer.parseInt(coinsAndEmodulus[1]);
@@ -29,7 +29,7 @@ public class Ecoins {
             Coin[] allCoins = new Coin[coinsCnt];
 
             for (int j = 0; j < coinsCnt; ++j) {
-                String[] singleCoinStr = in.readLine().split(" ");
+                String[] singleCoinStr = in.readLine().split(" ", 2);
 
                 Coin coin =
                         new Coin(
@@ -120,7 +120,9 @@ public class Ecoins {
                     throw new IllegalStateException(
                             "Can't read input from file '%s'".formatted(inFileName));
                 }
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(inStream))) {
+                try (BufferedReader in =
+                        new BufferedReader(
+                                new InputStreamReader(inStream, Charset.defaultCharset()))) {
                     System.out.println("==== Debug mode ====");
                     run(in);
                 }

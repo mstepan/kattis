@@ -2,8 +2,6 @@ package com.github.mstepan.kattis.accepted;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -18,12 +16,12 @@ public class SendMoreMoney {
 
         String trimmedLine = line.trim();
 
-        String[] firstHalf = trimmedLine.split("\\+");
+        String[] firstHalf = trimmedLine.split("\\+", 2);
         assert firstHalf.length == 2;
 
         String value1 = firstHalf[0];
 
-        String[] secondHalf = firstHalf[1].split("=");
+        String[] secondHalf = firstHalf[1].split("=", 1);
         assert secondHalf.length == 2;
 
         String value2 = secondHalf[0];
@@ -240,29 +238,27 @@ public class SendMoreMoney {
 
     public static void main(String[] args) throws Exception {
 
-        boolean debugMode = System.getenv("DEBUG") != null;
+        final boolean debugMode = System.getenv("DEBUG") != null;
 
-        BufferedReader in;
         if (debugMode) {
-            final Path inFilePath =
-                    Path.of(
-                            Objects.requireNonNull(
-                                            SendMoreMoney.class
-                                                    .getClassLoader()
-                                                    .getResource("in.txt"))
-                                    .toURI());
-
-            in = Files.newBufferedReader(inFilePath);
-            try {
-                System.out.println("==== Debug mode ====");
-                run(in);
-
-            } finally {
-                in.close();
+            final String inFileName = "in.txt";
+            try (InputStream inStream =
+                    Ecoins.class.getClassLoader().getResourceAsStream(inFileName)) {
+                if (inStream == null) {
+                    throw new IllegalStateException(
+                            "Can't read input from file '%s'".formatted(inFileName));
+                }
+                try (BufferedReader in =
+                        new BufferedReader(
+                                new InputStreamReader(inStream, Charset.defaultCharset()))) {
+                    System.out.println("==== Debug mode ====");
+                    run(in);
+                }
             }
 
         } else {
-            in = new BufferedReader(new InputStreamReader(System.in, Charset.defaultCharset()));
+            BufferedReader in =
+                    new BufferedReader(new InputStreamReader(System.in, Charset.defaultCharset()));
             run(in);
         }
     }

@@ -1,5 +1,6 @@
 package com.github.mstepan.kattis;
 
+import com.github.mstepan.kattis.accepted.Ecoins;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -21,15 +22,16 @@ public class Template {
         final boolean debugMode = System.getenv("DEBUG") != null;
 
         if (debugMode) {
-
             final String inFileName = "in.txt";
             try (InputStream inStream =
-                    Template.class.getClassLoader().getResourceAsStream(inFileName)) {
+                    Ecoins.class.getClassLoader().getResourceAsStream(inFileName)) {
                 if (inStream == null) {
                     throw new IllegalStateException(
                             "Can't read input from file '%s'".formatted(inFileName));
                 }
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(inStream))) {
+                try (BufferedReader in =
+                        new BufferedReader(
+                                new InputStreamReader(inStream, Charset.defaultCharset()))) {
                     System.out.println("==== Debug mode ====");
                     run(in);
                 }

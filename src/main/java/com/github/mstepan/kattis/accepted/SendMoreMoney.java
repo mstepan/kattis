@@ -1,6 +1,7 @@
 package com.github.mstepan.kattis.accepted;
 
 import java.io.*;
+import java.lang.invoke.MethodHandles;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -243,7 +244,10 @@ public class SendMoreMoney {
         if (debugMode) {
             final String inFileName = "in.txt";
             try (InputStream inStream =
-                    Ecoins.class.getClassLoader().getResourceAsStream(inFileName)) {
+                    MethodHandles.lookup()
+                            .lookupClass()
+                            .getClassLoader()
+                            .getResourceAsStream(inFileName)) {
                 if (inStream == null) {
                     throw new IllegalStateException(
                             "Can't read input from file '%s'".formatted(inFileName));

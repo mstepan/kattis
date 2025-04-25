@@ -1,12 +1,9 @@
-package com.github.mstepan.kattis;
+package com.github.mstepan.kattis.accepted;
 
 import java.io.*;
 import java.lang.invoke.MethodHandles;
-import java.math.BigDecimal;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Arrays;
 
 /**
  * Hiding Chickens
@@ -16,19 +13,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /*
 ==== Debug mode ====
-time: 1527 ms
+time: 950 ms
 15968.180089
  */
 public class HidingChickens {
 
     public static void run(BufferedReader in) throws IOException {
-        //
-        //        for (int i = 0; i < 20; ++i) {
-        //            BigDecimal x = randomBigDecimal();
-        //            BigDecimal y = randomBigDecimal();
-        //
-        //            System.out.printf("%.6f %.6f%n", x, y);
-        //        }
 
         Location rooster = Location.toLocation(in.readLine());
 
@@ -41,13 +31,13 @@ public class HidingChickens {
             spots[i] = Location.toLocation(in.readLine());
         }
 
-        long startTime = System.nanoTime();
+        //        long startTime = System.nanoTime();
 
         long[][] distancesMatrix = calculateAllDistances(spots);
         long bestResult = bestTripRec(spots.length, (1 << (spots.length - 1)) - 1, distancesMatrix);
 
-        long endTime = System.nanoTime();
-        System.out.printf("time: %d ms%n", (endTime - startTime) / 1_000_000L);
+        //        long endTime = System.nanoTime();
+        //        System.out.printf("time: %d ms%n", (endTime - startTime) / 1_000_000L);
 
         System.out.printf("%.6f%n", ((double) bestResult) / Location.SCALE_FACTOR);
     }
@@ -69,25 +59,20 @@ public class HidingChickens {
         return distances;
     }
 
-    private static BigDecimal randomBigDecimal() {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
+    private static final long[] CACHE = new long[1 << 20];
 
-        int fullValue = random.nextInt(1001);
-        int afterCommaValue = random.nextInt(1000000);
-
-        return new BigDecimal(fullValue + "." + afterCommaValue);
+    static {
+        Arrays.fill(CACHE, -1L);
     }
-
-    private static final Map<Integer, Long> CACHE = new HashMap<>();
 
     private static long bestTripRec(int spotsCnt, int mask, long[][] distancesMatrix) {
         if (mask == 0) {
             return 0L;
         }
 
-        Long cachedResult = CACHE.get(mask);
+        long cachedResult = CACHE[mask];
 
-        if (cachedResult != null) {
+        if (cachedResult >= 0) {
             return cachedResult;
         }
 
@@ -127,7 +112,7 @@ public class HidingChickens {
             }
         }
 
-        CACHE.put(mask, bestDistance);
+        CACHE[mask] = bestDistance;
 
         return bestDistance;
     }

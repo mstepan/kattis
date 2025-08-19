@@ -25,4 +25,5 @@ env_maven.properties
 # MacOS caches files
 .DS_Store
 
-
+# Oracle Code Assist
+.oca/

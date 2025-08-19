@@ -14,6 +14,9 @@ public class Template {
 
     public static void run(BufferedReader in) throws IOException {
         String line = in.readLine();
+
+        // TODO: implement main algorithm here
+
         System.out.println(line);
     }
 

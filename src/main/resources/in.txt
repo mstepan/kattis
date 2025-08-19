@@ -1,8 +1,16 @@
-6 4
-3 1
-2 1
-1 2
-1 3
-3 3
-0 0
-0 0
+15
+abcdefghijkl
+bcdefghijklm
+cdefghijklmn
+defghijklmno
+efghijklmnop
+fghijklmnopq
+ghijklmnopqr
+hijklmnopqrs
+ijklmnopqrst
+jklmnopqrstu
+klmnopqrstuv
+lmnopqrstuvw
+mnopqrstuvwx
+nopqrstuvwxy
+opqrstuvwxyz

@@ -1,4 +1,4 @@
-15
+25
 abcdefghijkl
 bcdefghijklm
 cdefghijklmn
@@ -14,3 +14,13 @@ lmnopqrstuvw
 mnopqrstuvwx
 nopqrstuvwxy
 opqrstuvwxyz
+aghijklmnopq
+gbijklmnopqr
+hvjklmnopqrs
+ijdlmnopqrst
+jkrmnopqrstu
+klenopqrstuv
+lmkopqrstuvw
+mnlpqrstuvwx
+nomqrstuvwxy
+opzrstuvwxyz

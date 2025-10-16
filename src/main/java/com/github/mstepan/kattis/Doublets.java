@@ -12,8 +12,204 @@ import java.util.*;
  */
 public class Doublets {
 
-    // TODO: 'Time Limit Exceeded' for last case
-    // Use Ternary-Search Tree for find words that has 1 character difference
+    static class TSNode {
+        char ch;
+        TSNode left;
+        TSNode mid;
+        TSNode right;
+        boolean endOfWord;
+
+        TSNode(char ch) {
+            this.ch = ch;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(ch);
+        }
+    }
+
+    static class TSTree {
+
+        TSNode root;
+
+        void add(String value) {
+            if (root == null) {
+                root = insertSuffix(value, 0);
+            } else {
+
+                int idx = 0;
+                TSNode cur = root;
+                TSNode lastNotNull = root;
+
+                while (idx < value.length() && cur != null) {
+                    char ch = value.charAt(idx);
+
+                    if (cur.ch == ch) {
+                        cur = cur.mid;
+                        ++idx;
+                    } else if (ch > cur.ch) {
+                        cur = cur.right;
+                    } else {
+                        cur = cur.left;
+                    }
+
+                    if (cur != null) {
+                        lastNotNull = cur;
+                    }
+                }
+
+                if (idx == value.length()) {
+                    lastNotNull.endOfWord = true;
+                } else {
+                    char ch = value.charAt(idx);
+
+                    if (ch == lastNotNull.ch) {
+                        lastNotNull.mid = insertSuffix(value, idx);
+                    } else if (ch > lastNotNull.ch) {
+                        lastNotNull.right = insertSuffix(value, idx);
+                    } else {
+                        lastNotNull.left = insertSuffix(value, idx);
+                    }
+                }
+            }
+        }
+
+        private TSNode insertSuffix(String value, int from) {
+            assert value != null;
+            assert from > 0 && from < value.length();
+
+            TSNode cur = new TSNode(value.charAt(from));
+            TSNode last = cur;
+
+            for (int i = from + 1; i < value.length(); i++) {
+                TSNode next = new TSNode(value.charAt(i));
+                last.mid = next;
+
+                last = next;
+            }
+
+            last.endOfWord = true;
+
+            return cur;
+        }
+
+        public void printAllWords() {
+            Queue<TSTreeTraversalResult> queue = new ArrayDeque<>();
+            queue.add(new TSTreeTraversalResult(root, ""));
+
+            List<String> words = new ArrayList<>();
+
+            while (!queue.isEmpty()) {
+                TSTreeTraversalResult result = queue.poll();
+
+                if (result.node.endOfWord) {
+                    words.add(result.prefix + result.node.ch);
+                }
+
+                if (result.node.left != null) {
+                    queue.add(new TSTreeTraversalResult(result.node.left, result.prefix));
+                }
+
+                if (result.node.right != null) {
+                    queue.add(new TSTreeTraversalResult(result.node.right, result.prefix));
+                }
+
+                if (result.node.mid != null) {
+                    queue.add(
+                            new TSTreeTraversalResult(
+                                    result.node.mid, result.prefix + result.node.ch));
+                }
+            }
+
+            for (String singleWord : words) {
+                System.out.println(singleWord);
+            }
+        }
+
+        public List<String> findSimilar(String word) {
+
+            List<String> result = new ArrayList<>();
+
+            Queue<SearchPart> queue = new ArrayDeque<>();
+            queue.add(new SearchPart("", root, word, 0, 1));
+
+            while (!queue.isEmpty()) {
+
+                SearchPart part = queue.poll();
+
+                if (part.editsCount < 0) {
+                    continue;
+                }
+
+                if (part.curNode == null) {
+                    continue;
+                }
+
+                if (part.curNode.endOfWord) {
+                    if (part.wordIdx + 1 == word.length()
+                            && (part.curNode.ch == word.charAt(part.wordIdx)
+                                    || part.editsCount == 1)) {
+                        result.add(part.prefix + part.curNode.ch);
+                        continue;
+                    } else if (part.wordIdx + 2 == word.length()
+                            && part.curNode.ch == word.charAt(part.wordIdx)
+                            && part.editsCount == 1) {
+                        result.add(part.prefix + part.curNode.ch);
+                        continue;
+                    } else {
+                        continue;
+                    }
+                }
+
+                // go left
+                queue.add(
+                        new SearchPart(
+                                part.prefix,
+                                part.curNode.left,
+                                part.word,
+                                part.wordIdx,
+                                part.editsCount));
+
+                // go right
+                queue.add(
+                        new SearchPart(
+                                part.prefix,
+                                part.curNode.right,
+                                part.word,
+                                part.wordIdx,
+                                part.editsCount));
+
+                // go middle
+                char wordCh = part.wordIdx >= word.length() ? '?' : word.charAt(part.wordIdx);
+                char nodeCh = part.curNode.ch;
+
+                if (wordCh == nodeCh) {
+                    queue.add(
+                            new SearchPart(
+                                    part.prefix + nodeCh,
+                                    part.curNode.mid,
+                                    part.word,
+                                    part.wordIdx + 1,
+                                    part.editsCount));
+                } else {
+                    queue.add(
+                            new SearchPart(
+                                    part.prefix + nodeCh,
+                                    part.curNode.mid,
+                                    part.word,
+                                    part.wordIdx + 1,
+                                    part.editsCount - 1));
+                }
+            }
+
+            return result;
+        }
+    }
+
+    record SearchPart(String prefix, TSNode curNode, String word, int wordIdx, int editsCount) {}
+
+    record TSTreeTraversalResult(TSNode node, String prefix) {}
 
     public static void run(BufferedReader in) throws IOException {
 
@@ -59,27 +255,25 @@ public class Doublets {
 
         private static Map<String, Set<String>> buildSimilarityGraph(List<String> dictionaryWords) {
 
-            Map<String, Set<String>> simGraph = new HashMap<>();
-
-            Map<String, Set<String>> edges = new HashMap<>();
+            TSTree tree = new TSTree();
 
             for (String word : dictionaryWords) {
+                tree.add(word);
+            }
 
+            //            tree.printAllWords();
+
+            Map<String, Set<String>> simGraph = new HashMap<>();
+
+            for (String word : dictionaryWords) {
                 addVertex(simGraph, word);
 
-                Set<String> variants = generateVariants(word);
+                List<String> similarWords = tree.findSimilar(word);
 
-                for (String singleVariant : variants) {
-                    Set<String> similarVertexes =
-                            edges.compute(
-                                    singleVariant,
-                                    (key, other) -> other == null ? new HashSet<>() : other);
+                //                System.out.printf("Similar: %s -> %s\n", word, similarWords);
 
-                    for (String simVertex : similarVertexes) {
-                        addEdge(simGraph, word, simVertex);
-                    }
-
-                    similarVertexes.add(word);
+                for (String similarWord : similarWords) {
+                    addEdge(simGraph, word, similarWord);
                 }
             }
 

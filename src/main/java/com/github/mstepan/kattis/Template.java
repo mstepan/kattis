@@ -20,6 +20,8 @@ public class Template {
         System.out.println(line);
     }
 
+    // ============================== DON'T MODIFY ANYTHING BELOW ==============================
+
     public static void main(String[] args) throws Exception {
 
         final boolean debugMode = System.getenv("DEBUG") != null;
